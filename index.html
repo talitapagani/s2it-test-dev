@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>S2IT Test</title>
+	<link rel="stylesheet" href="assets/css/s2it.css" media="all" />
+</head>
+<body ng-app="ngtasks">
+
+	<header id="header" role="banner">
+		<div class="wrapper">
+			<h1 class="logo"><img src="assets/img/logo_s2it.png" alt="S2IT" /></h1>
+		</div>
+	</header>
+
+	<section id="main" role="main">
+		<div class="wrapper relative-container">
+			
+			<div class="search" role="search">
+				<form action=""><input type="search" placeholder="Search..." class="input-text" ng-model="search" /></form>
+			</div>
+
+			<table class="grid">
+				<thead>
+					<th>Done?</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Actions</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="task in tasks | filter:search" ng-hide="tasks.length <= 0">
+						<td>
+							<input type="checkbox" checked="{{ task.status }}" />
+						</td>
+						<td>{{ task.name }}</td>
+						<td>{{ task.description }}</td>
+						<td class="actions">
+							<a href="#" ng-click="editTask(task.id)"><img src="assets/img/icon-edit.png" alt="Edit" /></a>
+							<a href="#" ng-click="deleteTask(task.id)"><img src="assets/img/icon-trash.png" alt="Delete" /></a>
+						</td>
+					</tr>
+					<tr ng-hide="tasks">
+						<td colspan="4">No results</td>
+					</tr>
+				</tbody>
+				<tfoot ng-if="tasks">
+					<tr>
+						<td colspan="4">
+							Total <output>{{ tasks.length }} itens</output>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+
+			<div class="add_register">
+				<button class="button default" ng-click="createTask()">Add</button>
+			</div>
+
+		</div>
+	</section>
+
+	<footer role="contentinfo">
+		<div class="wrapper">
+			<ul class="social-icons">
+				<li><a href="#"><img src="assets/img/icon-facebook.png" alt="Facebook" /></a></li>
+				<li><a href="#"><img src="assets/img/icon-linkedin.png" alt="Linkedin" /></a></li>
+				<li><a href="#"><img src="assets/img/icon-twitter.png" alt="Twitter" /></a></li>
+				<li><a href="#"><img src="assets/img/icon-gplus.png" alt="Google+" /></a></li>
+			</ul>
+		</div>
+	</footer>
+
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="node_modules/jquery-ui/core.js"></script>
+	<script src="node_modules/jquery-ui/dialog.js"></script>
+	<script src="node_modules/angularjs/index.js"></script>
+	<script src="assets/js/tasks.js"></script>
+</body>
+</html>

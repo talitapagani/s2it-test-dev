@@ -1,0 +1,212 @@
+/*
+CSS RESET (Eric Meyer's CSS Reset)
+////////////////////////////////*/
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*
+GLOBAL SETTINGS AND CLASSES
+////////////////////////////////*/
+
+html {
+	font: normal 14px/1em Arial, Verdana, Helvetica, sans-serif;
+}
+
+.wrapper {
+	width: 85vmax;
+	margin: 0 auto 0 auto;
+	padding: 0 6.5vw 0 6.5vw;
+}
+
+.relative-container {
+	position: relative;
+}
+
+.input-text {
+	color: #9E9E9E;
+	font-size: 1em;
+	border: none;
+	line-height: 4em;
+	border-bottom: 1px solid #9E9E9E;
+}
+
+#header {
+	border-bottom: 2px solid #039BE5;
+}
+
+/*
+SEARCH
+////////////////////////////////*/
+
+.search {
+	margin-top: 1em;
+}
+
+.search .input-text {
+	width: 100%;
+}
+
+/*
+BUTTONS
+////////////////////////////////*/
+
+.button {
+	line-height: 2.7em;
+	border: none;
+	cursor: pointer;
+	color: #FFF;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 0 31px 0 31px;
+	border-radius: 3px;
+	-webkit-box-shadow: 1px 2px 6px 0px #D0D0D0;
+    -moz-box-shadow: 1px 2px 6px 0px #D0D0D0;
+    box-shadow: 1px 2px 6px 0px #D0D0D0;
+}
+
+.button.default {
+	background: #cccccc;
+	background: -moz-linear-gradient(top,  #cccccc 0%, #686868 100%);
+	background: -webkit-linear-gradient(top,  #cccccc 0%,#686868 100%);
+	background: linear-gradient(to bottom,  #cccccc 0%,#686868 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#686868',GradientType=0 );
+}
+
+.button.success {
+	background: #4AF7E7;
+	background: -moz-linear-gradient(top,  #4AF7E7 0%, #27A79B 100%);
+	background: -webkit-linear-gradient(top,  #4AF7E7 0%,#27A79B 100%);
+	background: linear-gradient(to bottom,  #4AF7E7 0%,#27A79B 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4AF7E7', endColorstr='#27A79B',GradientType=0 );
+}
+
+/*
+GRID
+////////////////////////////////*/
+
+.grid {
+	width: 100%;
+	margin: 1em 0 1em 0;
+}
+
+.grid th, .grid td {
+	padding: 1.5em;
+	text-align: center;
+}
+
+.grid th {
+	color: #FFF;
+	font-weight: bold;
+	background: #039BE5;
+	/*line-height: 3.7em;*/
+}
+
+tbody tr:nth-child(odd) {
+	background: #F5F5F5;
+}
+
+.grid .actions a {
+	margin-right: 10px;
+}
+
+.grid tfoot td {
+	background: #DADADA;
+	font-weight: bold;
+	text-align: right;
+}
+
+/*
+FOOTER AND SOCIAL ICONS
+////////////////////////////////*/
+
+footer {
+	line-height: 3.43em;
+	height: 3.43em;
+	background: #F5F5F5;
+	width: 100vmax;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+}
+
+.social-icons {
+	float: right;
+}
+
+.social-icons li {
+	display: inline-block;
+	padding: 5px 0 0 0;
+}
+
+/*
+RESPONSIVE RULES
+////////////////////////////////*/
+
+@media screen and (min-width: 700px) {
+	.add_register {
+		position: absolute;
+		top: 1.5em;
+		right: 6.5vmax;
+	}
+
+	.search {
+		width: 40vmax;
+	}
+}
+
+@media screen and (max-width: 700px) {
+	.add_register button {
+		width: 100%;
+	}
+
+	.add_register button::after {
+		content: ' new task';
+	}
+}
