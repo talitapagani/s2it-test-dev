@@ -210,3 +210,50 @@ RESPONSIVE RULES
 		content: ' new task';
 	}
 }
+
+/*
+OVERRIDE
+////////////////////////////////*/
+.override {
+	width: 100vmax;
+	height: 100vmax;
+	background: rgba(0, 0, 0, 0.6);
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.modal {
+	max-width: 375px;
+	background: #FFF;
+	position: absolute;
+	margin: auto;
+	left: 0;
+	top: 50px;
+	right: 0;
+	-webkit-box-shadow: 0px 10px 20px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 	0px 10px 20px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 		0px 10px 20px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal header {
+	font-size: 2.29em;
+	color: #FFF;
+	padding: 1.5rem;
+	background: #039BE5;
+}
+
+.modal form {
+	padding: 1.5rem;
+}
+
+.modal .input-text {
+	line-height: 2.5rem;
+	color: #000;
+	margin-bottom: 15px;
+	width: 100%;
+}
+
+.modal .buttons {
+	text-align: right;
+}

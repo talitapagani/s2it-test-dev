@@ -1,62 +1,84 @@
 (function(angular) {
 
-var app = angular.module('ngtasks.controllers', []);
+'use strict';
 
-app.controller('TaskMgmt', ['$scope', 'TasksFactory', 'TaskFactory', '$location',
-    function ($scope, UsersFactory, UserFactory, $location) {
+var app = angular.module('TasksTest', []);
+
+app.controller('TaskMgmt', function ($scope) {
+
+        $scope.showModalAdd = false;
+        $scope.showModalEdit = false;
+        $scope.showModalDelete = false;
+        $scope.tasks = { 'taskList': JSON.parse(localStorage.getItem("dbTasks")) || [] };
+        $scope.nextIndex = 1;
+
+        console.log($scope.tasks.taskList);
 
         // callback for ng-click 'editUser':
         $scope.editTask = function (taskId) {
-            $location.path('/task-detail/' + taskId);
+            //$location.path('/task-detail/' + taskId);
+            $scope.showModalEdit = true;
+        };
+
+        $scope.createTask = function () {
+            $scope.showModalAdd = true;
         };
 
         // callback for ng-click 'deleteUser':
         $scope.deleteTask = function (taskId) {
-            TaskFactory.delete({ id: taskId });
-            $scope.tasks = TasksFactory.query();
+            $scope.showModalDelete = true;
         };
 
-        // callback for ng-click 'createUser':
-        $scope.createNewtask = function () {
-            $location.path('/task-creation');
+        $scope.confirmDeleteTask = function(taskId) {
+            //TaskFactory.delete({ id: taskId });
+            //$scope.tasks = TasksFactory.query();
         };
 
-        $scope.tasks = TasksFactory.query();
-    }]);
-
-app.controller('TaskDetailMgmt', ['$scope', '$routeParams', 'TaskFactory', '$location',
-    function ($scope, $routeParams, TaskFactory, $location) {
-
-        // callback for ng-click 'updateUser':
-        $scope.updateTask= function () {
-            TaskFactory.update($scope.task);
-            $location.path('/index');
+        $scope.updateTask = function () {
+            //TaskFactory.update($scope.task);
+            //$location.path('/index');
         };
+
+        $scope.createNewTask = function () {
+            var tsk = JSON.stringify({
+                'id': $scope.nextIndex,
+                'name': $("#addName").val(),
+                'description': $("#addDescription").val()
+            });
+
+            $scope.tasks.taskList.push(tsk);
+            localStorage.setItem("dbTasks", JSON.stringify($scope.tasks.taskList));
+
+            console.log(localStorage.getItem("dbTasks"));
+
+            $scope.showModalAdd = false;
+
+            $scope.nextIndex++;
+        }
 
         // callback for ng-click 'cancel':
-        $scope.cancel = function () {
-            $location.path('/index');
+        $scope.cancel = function (option) {
+            //$location.path('/index');
+            switch(option) {
+                case "Add":
+                    $("#frmAdd input").each(function() {
+                        $(this).val("");
+                    });
+                   $scope.showModalAdd = false;
+                   break;
+                case "Edit":
+                    $("#frmEdit input").each(function() {
+                        $(this).val("");
+                    });
+                   $scope.showModalEdit = false;
+                   break;
+                case "Delete":
+                   $scope.showModalDelete = false;
+                   break; 
+            }
         };
 
-        $scope.task = TaskFactory.show({id: $routeParams.id});
-    }]);
-
-app.controller('TaskCreationMgmt', ['$scope', 'TasksFactory', '$location',
-    function ($scope, TasksFactory, $location) {
-
-        // callback for ng-click 'createNewUser':
-        $scope.createNewTask = function () {
-            TasksFactory.create($scope.task);
-            $location.path('/index');
-        }
-    }])
-
-angular.module('ngtasks', ['ngtasks.filters', 'ngtasks.services', 'ngtasks.directives', 'ngtasks.controllers']).
-    config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/index', {templateUrl: 'index.html', controller: 'TaskMgmt'});
-        $routeProvider.when('/user-detail/:id', {templateUrl: 'task-detail.html', controller: 'TaskDetailMgmt'});
-        $routeProvider.when('/user-creation', {templateUrl: 'task-creation.html', controller: 'TaskCreationMgmt'});
-        $routeProvider.otherwise({redirectTo: '/index'});
-    }]);
+        //$scope.tasks = JSON.parse(localStorage.getItem("dbTasks"));
+    });
 
 })(window.angular);

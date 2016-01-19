@@ -7,7 +7,7 @@
 	<title>S2IT Test</title>
 	<link rel="stylesheet" href="assets/css/s2it.css" media="all" />
 </head>
-<body ng-app="ngtasks">
+<body ng-app="TasksTest">
 
 	<header id="header" role="banner">
 		<div class="wrapper">
@@ -15,7 +15,7 @@
 		</div>
 	</header>
 
-	<section id="main" role="main">
+	<section id="main" role="main" ng-controller="TaskMgmt">
 		<div class="wrapper relative-container">
 			
 			<div class="search" role="search">
@@ -30,7 +30,7 @@
 					<th>Actions</th>
 				</thead>
 				<tbody>
-					<tr ng-repeat="task in tasks | filter:search" ng-hide="tasks.length <= 0">
+					<tr ng-repeat="task in tasks.taskList | filter:search" ng-hide="tasks.taskList.length = 0">
 						<td>
 							<input type="checkbox" checked="{{ task.status }}" />
 						</td>
@@ -41,14 +41,14 @@
 							<a href="#" ng-click="deleteTask(task.id)"><img src="assets/img/icon-trash.png" alt="Delete" /></a>
 						</td>
 					</tr>
-					<tr ng-hide="tasks">
+					<tr ng-hide="tasks.taskList">
 						<td colspan="4">No results</td>
 					</tr>
 				</tbody>
-				<tfoot ng-if="tasks">
+				<tfoot ng-if="tasks.taskList">
 					<tr>
 						<td colspan="4">
-							Total <output>{{ tasks.length }} itens</output>
+							Total <output>{{ tasks.taskList.length }} itens</output>
 						</td>
 					</tr>
 				</tfoot>
@@ -58,6 +58,37 @@
 				<button class="button default" ng-click="createTask()">Add</button>
 			</div>
 
+		</div>
+
+		<div class="override" ng-show="showModalEdit || showModalAdd">
+			<div class="modal" modal="showModalEdit" ng-show="showModalEdit">
+				<header>
+					<h2>Edit</h2>
+				</header>
+				<form novalidate="novalidate" id="frmEdit">
+					<input type="hidden" id="taskID" />
+					<input type="text" id="editName" placeholder="Name" class="input-text" required />
+					<input type="text" id="editDescription" placeholder="Description" class="input-text" required />
+					<div class="buttons">
+						<button class="button default" ng-click="updateTask()">Edit</button>
+						<button class="button success" ng-click="cancel('Edit')">Cancel</button>
+					</div>
+				</form>
+			</div>
+
+			<div class="modal" modal="showModalAdd" ng-show="showModalAdd">
+				<header>
+					<h2>Add</h2>
+				</header>
+				<form novalidate="novalidate" id="frmAdd">
+					<input type="text" id="addName" placeholder="Name" class="input-text" required />
+					<input type="text" id="addDescription" placeholder="Description" class="input-text" required />
+					<div class="buttons">
+						<button class="button default" ng-click="createNewTask()">Add</button>
+						<button class="button success" ng-click="cancel('Add')">Cancel</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</section>
 
@@ -72,10 +103,10 @@
 		</div>
 	</footer>
 
-	<script src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script src="node_modules/jquery-ui/core.js"></script>
-	<script src="node_modules/jquery-ui/dialog.js"></script>
-	<script src="node_modules/angularjs/index.js"></script>
+	<script src="lib/jquery.js"></script>
+	<script src="lib/jquery-ui.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 	<script src="assets/js/tasks.js"></script>
 </body>
 </html>
