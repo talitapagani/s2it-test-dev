@@ -1,84 +1,160 @@
 (function(angular) {
 
-'use strict';
+    'use strict';
 
-var app = angular.module('TasksTest', []);
+    var app = angular.module('TasksTest', []);
 
-app.controller('TaskMgmt', function ($scope) {
-
-        $scope.showModalAdd = false;
-        $scope.showModalEdit = false;
-        $scope.showModalDelete = false;
-        $scope.tasks = { 'taskList': JSON.parse(localStorage.getItem("dbTasks")) || [] };
-        $scope.nextIndex = 1;
-
-        console.log($scope.tasks.taskList);
-
-        // callback for ng-click 'editUser':
-        $scope.editTask = function (taskId) {
-            //$location.path('/task-detail/' + taskId);
-            $scope.showModalEdit = true;
+    /* Garante que o local storage será um módulo do Angular */
+    app.factory("LocalStorage", function() {
+        var LS = {};
+        LS.getItem = function(key) {
+            return localStorage[key];
+        };
+        LS.setItem = function(key, value) {
+            localStorage[key] = value;
+            return value;
         };
 
-        $scope.createTask = function () {
-            $scope.showModalAdd = true;
-        };
+        return LS;
+    });
 
-        // callback for ng-click 'deleteUser':
-        $scope.deleteTask = function (taskId) {
-            $scope.showModalDelete = true;
-        };
+    app.controller('TaskMgmt', ['$scope', '$timeout', 'LocalStorage', function ($tasks, $timeout, LocalStorage) {
 
-        $scope.confirmDeleteTask = function(taskId) {
-            //TaskFactory.delete({ id: taskId });
-            //$scope.tasks = TasksFactory.query();
-        };
+        $tasks.showModal = false;
+        $tasks.showModalDelete = false;
+        $tasks.edit = false;
+        $tasks.loading = false;
+        $tasks.list = LocalStorage.getItem("dbTasks") ? JSON.parse(LocalStorage.getItem("dbTasks")) : [];
+        $tasks.current = null;
 
-        $scope.updateTask = function () {
-            //TaskFactory.update($scope.task);
-            //$location.path('/index');
-        };
+        console.log($tasks.list.length);
 
-        $scope.createNewTask = function () {
-            var tsk = JSON.stringify({
-                'id': $scope.nextIndex,
-                'name': $("#addName").val(),
-                'description': $("#addDescription").val()
-            });
+        // Private function, accessible only by the controller
+        function getTask(taskId) {
 
-            $scope.tasks.taskList.push(tsk);
-            localStorage.setItem("dbTasks", JSON.stringify($scope.tasks.taskList));
+            // Using 'let' to ensure that the variables will work only on this scope
+            let i = 0, l = $tasks.list.length, task = { "obj": null, "index": 0 };
 
-            console.log(localStorage.getItem("dbTasks"));
+            for(; i < l; i++) {
+                if ($tasks.list[i].id == taskId) {
+                    task["obj"] = $tasks.list[i];
+                    task["index"] = i;
+                }
+            }
 
-            $scope.showModalAdd = false;
+            return task;
 
-            $scope.nextIndex++;
         }
 
-        // callback for ng-click 'cancel':
-        $scope.cancel = function (option) {
-            //$location.path('/index');
-            switch(option) {
-                case "Add":
-                    $("#frmAdd input").each(function() {
-                        $(this).val("");
+        $tasks.editTask = function (taskId) {
+            $tasks.showModal = true;
+            $tasks.edit = true;
+
+            // Stores in the controller cache the current task to be edited
+            $tasks.current = getTask(taskId)["obj"];
+
+            $tasks.taskID = taskId;
+            $tasks.name = $tasks.current.name;
+            $tasks.description = $tasks.current.description;
+        };
+
+        $tasks.addTask = function () {
+            $tasks.showModal = true;
+        };
+
+        $tasks.deleteTask = function (taskId) {
+            $tasks.showModalDelete = true;
+
+            $tasks.taskID = taskId;
+        };
+
+        $tasks.updateTask = function (taskId, form) {
+
+            if($tasks.name !== "" && $tasks.description !== "") {
+
+                $tasks.showModal = false;
+                $tasks.loading = true;
+
+                if(taskId) {
+                    $tasks.current.name = $tasks.name;
+                    $tasks.current.description = $tasks.description;
+
+                    $tasks.edit = false;
+                } else {
+                    // Generate a unique ID: if PerformanceTimeline API is available, 
+                    // round performance.now(), which is the high precision timer,
+                    // otherwise, use Date.getTime() as fallback
+                    var id_gen = (window.performance && typeof window.performance.now === "function") ? Math.floor(performance.now()) : Math.floor(new Date().getTime());
+
+                    $tasks.list.push({
+                        id: id_gen,
+                        name: $tasks.name,
+                        description: $tasks.description,
+                        done: false
                     });
-                   $scope.showModalAdd = false;
-                   break;
-                case "Edit":
-                    $("#frmEdit input").each(function() {
-                        $(this).val("");
-                    });
-                   $scope.showModalEdit = false;
-                   break;
-                case "Delete":
-                   $scope.showModalDelete = false;
-                   break; 
+                }
+
+                console.log($tasks.list);
+
+                localStorage.setItem("dbTasks", JSON.stringify($tasks.list));
+
+                form.$setPristine();
+                form.$setUntouched();
+
+                $tasks.taskID = null;
+                $tasks.name = '';
+                $tasks.description = '';
+
+                $timeout(function() {
+                    $tasks.loading = false;
+                }, 2000);
             }
         };
 
-        //$scope.tasks = JSON.parse(localStorage.getItem("dbTasks"));
-    });
+        $tasks.confirmDeleteTask = function(taskId) {
+
+            $tasks.showModalDelete = false;
+            $tasks.loading = true;
+
+            let index = getTask(taskId)["index"];
+
+            $tasks.list.splice(index, 1);
+
+            localStorage.setItem("dbTasks", JSON.stringify($tasks.list));
+
+            $tasks.taskID = null;
+
+            $timeout(function() {
+                $tasks.loading = false;
+            }, 2000);
+        };
+
+        // callback for ng-click 'cancel':
+        $tasks.cancel = function (form, option) {
+            switch(option) {
+                case "Delete":
+                    $tasks.taskID = null;
+                    $tasks.showModalDelete = false;
+                    break;
+                default:
+                    $tasks.taskID = null;
+                    $tasks.name = '';
+                    $tasks.description = '';
+                    $tasks.showModal = false;
+                    $tasks.edit = false;
+                    form.$setPristine();
+                    form.$setUntouched();
+                    break;
+            }
+        };
+
+        $tasks.finishTask = function(index, taskDone) {
+
+            $tasks.list[index].done = taskDone;
+
+            localStorage.setItem("dbTasks", JSON.stringify($tasks.list));
+
+        }
+    }]);
 
 })(window.angular);

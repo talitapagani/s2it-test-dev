@@ -4,14 +4,21 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>S2IT Test</title>
+	<title>S2IT Simple CRUD using Angular.js and VanillaCSS</title>
 	<link rel="stylesheet" href="assets/css/s2it.css" media="all" />
 </head>
 <body ng-app="TasksTest">
 
 	<header id="header" role="banner">
 		<div class="wrapper">
-			<h1 class="logo"><img src="assets/img/logo_s2it.png" alt="S2IT" /></h1>
+			<h1 class="logo">
+				<picture>
+					<source media="(max-width: 700px)" srcset="assets/img/logo_s2it_small.png" />
+					<source media="(min-width: 700px)" srcset="assets/img/logo_s2it.png" />
+					<!-- Fallback for legacy browsers -->
+					<img src="assets/img/logo_s2it.png" alt="S2IT" />
+				</picture>
+			</h1>
 		</div>
 	</header>
 
@@ -30,9 +37,9 @@
 					<th>Actions</th>
 				</thead>
 				<tbody>
-					<tr ng-repeat="task in tasks.taskList | filter:search" ng-hide="tasks.taskList.length = 0">
+					<tr ng-repeat="task in filtered = (list | filter: search)">
 						<td>
-							<input type="checkbox" checked="{{ task.status }}" />
+							<input type="checkbox" aria-label="Task {{ task.name }} is done?" ng-checked="task.done" ng-model="task.done" ng-click="finishTask($index, task.done)" />
 						</td>
 						<td>{{ task.name }}</td>
 						<td>{{ task.description }}</td>
@@ -41,72 +48,88 @@
 							<a href="#" ng-click="deleteTask(task.id)"><img src="assets/img/icon-trash.png" alt="Delete" /></a>
 						</td>
 					</tr>
-					<tr ng-hide="tasks.taskList">
+					<tr ng-hide="filtered.length > 0">
 						<td colspan="4">No results</td>
 					</tr>
 				</tbody>
-				<tfoot ng-if="tasks.taskList">
+				<tfoot ng-if="filtered.length > 0">
 					<tr>
 						<td colspan="4">
-							Total <output>{{ tasks.taskList.length }} itens</output>
+							Total <output>{{ filtered.length }} itens</output>
 						</td>
 					</tr>
 				</tfoot>
 			</table>
 
 			<div class="add_register">
-				<button class="button default" ng-click="createTask()">Add</button>
+				<button class="button default" ng-click="addTask()">Add</button>
 			</div>
 
 		</div>
 
-		<div class="override" ng-show="showModalEdit || showModalAdd">
-			<div class="modal" modal="showModalEdit" ng-show="showModalEdit">
+		<div class="override" ng-show="showModal || showModalDelete || loading">
+			<div class="modal" modal="showModal" ng-show="showModal">
 				<header>
-					<h2>Edit</h2>
+					<h2>{{ edit ? "Edit" : "Add" }}</h2>
 				</header>
-				<form novalidate="novalidate" id="frmEdit">
-					<input type="hidden" id="taskID" />
-					<input type="text" id="editName" placeholder="Name" class="input-text" required />
-					<input type="text" id="editDescription" placeholder="Description" class="input-text" required />
+				<form novalidate name="frmTask">
+					<input type="hidden" name="taskID" ng-model="taskID" />
+
+					<div class="input_container" ng-class="{ 'invalid': (frmTask.taskName.$invalid && frmTask.taskName.$touched), 'valid': frmTask.taskName.$valid }">
+						<label for="taskName" class="hidden">Task Name:</label>
+						<input type="text" name="taskName" id="taskName" ng-model="name" placeholder="Name" class="input-text" required />
+						<div role="alert" ng-show="frmTask.$submitted || frmTask.taskName.$touched">
+							<p class="error" ng-show="frmTask.taskName.$error.required">Enter a valid task name. This field cannot be blank.</p>
+						</div>
+					</div>
+
+					<div class="input_container" ng-class="{ 'invalid': (frmTask.taskDescription.$invalid && frmTask.taskDescription.$touched), 'valid': frmTask.taskDescription.$valid }">
+						<label for="taskName" class="hidden">Task Description:</label>
+						<input type="text" name="taskDescription" id="taskDescription" ng-model="description" placeholder="Description" class="input-text" required />
+					<div role="alert" ng-show="frmTask.$submitted || frmTask.taskDescription.$touched">
+						<p class="error" ng-show="frmTask.taskDescription.$error.required">Enter a valid description. This field cannot be blank.</p>
+					</div>
+					
+					</div>
+
 					<div class="buttons">
-						<button class="button default" ng-click="updateTask()">Edit</button>
-						<button class="button success" ng-click="cancel('Edit')">Cancel</button>
+						<button type="button" class="button default" ng-show="frmTask.taskName.$valid && frmTask.taskDescription.$valid" ng-click="updateTask(taskID, frmTask)">{{ edit ? "Edit" : "Add" }}</button>
+						<button type="reset" class="button success" ng-click="cancel(frmTask)">Cancel</button>
 					</div>
 				</form>
 			</div>
 
-			<div class="modal" modal="showModalAdd" ng-show="showModalAdd">
+			<div class="modal" modal="showModalDelete" ng-show="showModalDelete">
 				<header>
-					<h2>Add</h2>
+					<h2>Delete</h2>
 				</header>
 				<form novalidate="novalidate" id="frmAdd">
-					<input type="text" id="addName" placeholder="Name" class="input-text" required />
-					<input type="text" id="addDescription" placeholder="Description" class="input-text" required />
+					<p>Do you confirm?</p>
 					<div class="buttons">
-						<button class="button default" ng-click="createNewTask()">Add</button>
-						<button class="button success" ng-click="cancel('Add')">Cancel</button>
+						<button class="button default" ng-click="confirmDeleteTask(taskID)">Yes</button>
+						<button class="button success" ng-click="cancel(null, 'Delete')">No</button>
 					</div>
 				</form>
+			</div>
+
+			<div class="modal" modal="loading" ng-show="loading">
+				<p class="loading"><span>&#128259;</span></p>
 			</div>
 		</div>
 	</section>
 
 	<footer role="contentinfo">
-		<div class="wrapper">
+		<address class="wrapper">
 			<ul class="social-icons">
-				<li><a href="#"><img src="assets/img/icon-facebook.png" alt="Facebook" /></a></li>
-				<li><a href="#"><img src="assets/img/icon-linkedin.png" alt="Linkedin" /></a></li>
-				<li><a href="#"><img src="assets/img/icon-twitter.png" alt="Twitter" /></a></li>
-				<li><a href="#"><img src="assets/img/icon-gplus.png" alt="Google+" /></a></li>
+				<li><a href="https://www.facebook.com/somosS2IT" target="_blank"><img src="assets/img/icon-facebook.png" alt="Facebook" /></a></li>
+				<li><a href="https://www.linkedin.com/company/s2it" target="_blank"><img src="assets/img/icon-linkedin.png" alt="Linkedin" /></a></li>
+				<li><a href="https://twitter.com/somosS2IT" target="_blank"><img src="assets/img/icon-twitter.png" alt="Twitter" /></a></li>
+				<li><a href="https://plus.google.com/u/0/109599832055497705598/about" target="_blank"><img src="assets/img/icon-gplus.png" alt="Google+" /></a></li>
 			</ul>
-		</div>
+		</address>
 	</footer>
 
-	<script src="lib/jquery.js"></script>
-	<script src="lib/jquery-ui.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.1/angular.min.js"></script>
 	<script src="assets/js/tasks.js"></script>
 </body>
 </html>

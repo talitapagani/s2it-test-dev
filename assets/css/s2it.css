@@ -69,16 +69,41 @@ html {
 	position: relative;
 }
 
+.hidden {
+	position:absolute;
+	left:-10000px;
+	top:auto;
+	width:1px;
+	height:1px;
+	overflow:hidden;
+}
+
+#header {
+	border-bottom: 2px solid #039BE5;
+}
+
+#main {
+	padding-bottom: 4em;
+}
+
+/*
+FORMS - GENERAL
+////////////////////////////////*/
+
 .input-text {
 	color: #9E9E9E;
 	font-size: 1em;
 	border: none;
 	line-height: 4em;
 	border-bottom: 1px solid #9E9E9E;
+	-webkit-transition: outline 1s;
+	transition: outline 1s;
 }
 
-#header {
-	border-bottom: 2px solid #039BE5;
+.error {
+	color: #c0392b;
+	font-size: 0.9em;
+	padding-bottom: 1em;
 }
 
 /*
@@ -148,7 +173,7 @@ GRID
 	/*line-height: 3.7em;*/
 }
 
-tbody tr:nth-child(odd) {
+tbody tr:nth-child(even) {
 	background: #F5F5F5;
 }
 
@@ -202,6 +227,11 @@ RESPONSIVE RULES
 }
 
 @media screen and (max-width: 700px) {
+	
+	.logo {
+		text-align: center;
+	}
+
 	.add_register button {
 		width: 100%;
 	}
@@ -212,7 +242,7 @@ RESPONSIVE RULES
 }
 
 /*
-OVERRIDE
+MODAL DIALOG
 ////////////////////////////////*/
 .override {
 	width: 100vmax;
@@ -234,6 +264,8 @@ OVERRIDE
 	-webkit-box-shadow: 0px 10px 20px 10px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 	0px 10px 20px 10px rgba(0, 0, 0, 0.2);
     box-shadow: 		0px 10px 20px 10px rgba(0, 0, 0, 0.2);
+    -webkit-transition: display 500ms;
+    transition: display 500ms;
 }
 
 .modal header {
@@ -254,6 +286,67 @@ OVERRIDE
 	width: 100%;
 }
 
+.modal .input-text.ng-valid.ng-touched {
+	outline: 3px solid #2ecc71;
+}
+
+.modal .input-text.ng-invalid.ng-touched {
+	outline: 3px solid #e74c3c;
+}
+
 .modal .buttons {
 	text-align: right;
+}
+
+.modal .input_container {
+	position: relative;
+	width: 100%;
+}
+
+.input_container.valid::after {
+	content: "\2713";
+	display: block;
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	color: #27ae60;
+	font-size: 2em;
+}
+
+.input_container.invalid::after {
+	content: "\2717";
+	display: block;
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	color: #e74c3c;
+	font-size: 2em;
+}
+
+/*
+LOADING SCREEN
+////////////////////////////////*/
+
+.loading {
+	padding: 3em;
+	text-align: center;
+}
+
+.loading span {
+	display: block;
+	font-size: 3em;
+	color: #2980b9;
+	width: 3em;
+	margin: 0 auto;
+
+	animation: loadwheel 1s linear infinite;
+
+}
+
+@keyframes loadwheel { 
+    from { 
+        transform: rotate(0deg); 
+    } to { 
+        transform: rotate(360deg); 
+    }
 }
