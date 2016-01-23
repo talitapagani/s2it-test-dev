@@ -60,7 +60,7 @@ html {
 }
 
 .wrapper {
-	width: 85vmax;
+	width: 85vw;
 	margin: 0 auto 0 auto;
 	padding: 0 6.5vw 0 6.5vw;
 }
@@ -226,13 +226,12 @@ MODAL DIALOG
 }
 
 .modal {
-	max-width: 375px;
+	width: 375px;
 	background: #FFF;
 	position: absolute;
-	margin: auto;
 	left: 0;
+	left: calc(50vw - (375px/2));
 	top: 50px;
-	right: 0;
 	-webkit-box-shadow: 0px 10px 20px 10px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 	0px 10px 20px 10px rgba(0, 0, 0, 0.2);
     box-shadow: 		0px 10px 20px 10px rgba(0, 0, 0, 0.2);
@@ -331,11 +330,11 @@ RESPONSIVE RULES
 	.add_register {
 		position: absolute;
 		top: 1.5em;
-		right: 6.5vmax;
+		right: 6.5vw;
 	}
 
 	.search {
-		width: 40vmax;
+		width: 40vw;
 	}
 }
 
@@ -353,8 +352,12 @@ RESPONSIVE RULES
 		content: ' new task';
 	}
 
+	table.grid {
+		max-width: 100vmax;
+	}
+
 	table.grid, .grid thead, .grid tbody, .grid th, .grid td, .grid tr { 
-		display: block; 
+		display: block;
 	}
 
 	.grid thead tr {
@@ -401,4 +404,6 @@ RESPONSIVE RULES
 	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(2):before { content: "Name"; }
 	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(3):before { content: "Description"; }
 	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(4):before { content: "Actions"; }
+
+	.grid tfoot { display: none; }
 }
