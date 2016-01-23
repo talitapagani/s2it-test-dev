@@ -170,10 +170,13 @@ GRID
 	color: #FFF;
 	font-weight: bold;
 	background: #039BE5;
-	/*line-height: 3.7em;*/
 }
 
-tbody tr:nth-child(even) {
+.grid .grid-mobile-counter {
+	display: none;
+}
+
+.grid tbody tr:nth-child(even) {
 	background: #F5F5F5;
 }
 
@@ -208,37 +211,6 @@ footer {
 .social-icons li {
 	display: inline-block;
 	padding: 5px 0 0 0;
-}
-
-/*
-RESPONSIVE RULES
-////////////////////////////////*/
-
-@media screen and (min-width: 700px) {
-	.add_register {
-		position: absolute;
-		top: 1.5em;
-		right: 6.5vmax;
-	}
-
-	.search {
-		width: 40vmax;
-	}
-}
-
-@media screen and (max-width: 700px) {
-	
-	.logo {
-		text-align: center;
-	}
-
-	.add_register button {
-		width: 100%;
-	}
-
-	.add_register button::after {
-		content: ' new task';
-	}
 }
 
 /*
@@ -349,4 +321,84 @@ LOADING SCREEN
     } to { 
         transform: rotate(360deg); 
     }
+}
+
+/*
+RESPONSIVE RULES
+////////////////////////////////*/
+
+@media screen and (min-width: 700px) {
+	.add_register {
+		position: absolute;
+		top: 1.5em;
+		right: 6.5vmax;
+	}
+
+	.search {
+		width: 40vmax;
+	}
+}
+
+@media screen and (max-width: 700px) {
+	
+	.logo {
+		text-align: center;
+	}
+
+	.add_register button {
+		width: 100%;
+	}
+
+	.add_register button::after {
+		content: ' new task';
+	}
+
+	table.grid, .grid thead, .grid tbody, .grid th, .grid td, .grid tr { 
+		display: block; 
+	}
+
+	.grid thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	.grid tbody tr:nth-child(odd) {
+		background: #F5F5F5;
+	}
+
+	.grid tbody tr:nth-child(even) {
+		background: #DADADA;
+	}
+
+	.grid tbody :not(.grid-mobile-counter) td {
+		position: relative;
+		padding-left: 30%;
+		text-align: left;
+	}
+
+	.grid tbody :not(.grid-mobile-counter) td:before {
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 1.5em;
+		text-align: left;
+		color: #FFF;
+		font-weight: bold;
+		background: #039BE5;
+		width: 20%;
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+
+	.grid tbody tr.grid-mobile-counter {
+		display: table-row;
+		background: #FFF;
+		font-weight: bold;
+	}
+
+	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(1):before { content: "Done?"; }
+	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(2):before { content: "Name"; }
+	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(3):before { content: "Description"; }
+	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(4):before { content: "Actions"; }
 }

@@ -37,6 +37,11 @@
 					<th>Actions</th>
 				</thead>
 				<tbody>
+					<tr class="grid-mobile-counter" ng-if="filtered.length > 0">
+						<td colspan="4">
+							Total <output>{{ filtered.length }} itens</output>
+						</td>
+					</tr>
 					<tr ng-repeat="task in filtered = (list | filter: search)">
 						<td>
 							<input type="checkbox" aria-label="Task {{ task.name }} is done?" ng-checked="task.done" ng-model="task.done" ng-click="finishTask($index, task.done)" />
