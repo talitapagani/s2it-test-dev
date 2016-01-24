@@ -81,6 +81,7 @@
 					<input type="hidden" name="taskID" ng-model="taskID" />
 
 					<div class="input_container" ng-class="{ 'invalid': (frmTask.taskName.$invalid && frmTask.taskName.$touched), 'valid': frmTask.taskName.$valid }">
+						<!-- Hidden label for accessibility purposes. Screen readers are able to scan the label -->
 						<label for="taskName" class="hidden">Task Name:</label>
 						<input type="text" name="taskName" id="taskName" ng-model="name" placeholder="Name" class="input-text" required />
 						<div role="alert" ng-show="frmTask.$submitted || frmTask.taskName.$touched">
@@ -89,6 +90,7 @@
 					</div>
 
 					<div class="input_container" ng-class="{ 'invalid': (frmTask.taskDescription.$invalid && frmTask.taskDescription.$touched), 'valid': frmTask.taskDescription.$valid }">
+						<!-- Hidden label for accessibility purposes. Screen readers are able to scan the label -->
 						<label for="taskName" class="hidden">Task Description:</label>
 						<input type="text" name="taskDescription" id="taskDescription" ng-model="description" placeholder="Description" class="input-text" required />
 					<div role="alert" ng-show="frmTask.$submitted || frmTask.taskDescription.$touched">
@@ -117,6 +119,10 @@
 				</form>
 			</div>
 
+			<!-- I made this fake loading just to ensure that user will be able to interact
+				 with the page only after the data is saved in LocalStorage. Sometimes, the operation within
+				 Angular controller may be completed, but the browser is still processing the data in LocalStorage,
+				 so, we could have some data corruption if user tries to add, update or delete during this process -->
 			<div class="modal" modal="loading" ng-show="loading">
 				<p class="loading"><span>&#128259;</span></p>
 			</div>
