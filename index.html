@@ -31,24 +31,26 @@
 
 			<table class="grid">
 				<thead>
-					<th>Done?</th>
-					<th>Name</th>
-					<th>Description</th>
-					<th>Actions</th>
-				</thead>
-				<tbody>
+					<tr>
+						<th>Done?</th>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Actions</th>
+					</tr>
 					<tr class="grid-mobile-counter" ng-if="filtered.length > 0">
 						<td colspan="4">
 							Total <output>{{ filtered.length }} itens</output>
 						</td>
 					</tr>
+				</thead>
+				<tbody>
 					<tr ng-repeat="task in filtered = (list | filter: search)">
-						<td>
+						<td data-header="Done?">
 							<input type="checkbox" aria-label="Task {{ task.name }} is done?" ng-checked="task.done" ng-model="task.done" ng-click="finishTask($index, task.done)" />
 						</td>
-						<td>{{ task.name }}</td>
-						<td>{{ task.description }}</td>
-						<td class="actions">
+						<td data-header="Name">{{ task.name }}</td>
+						<td data-header="Description">{{ task.description }}</td>
+						<td data-header="Actions" class="actions">
 							<a href="#" ng-click="editTask(task.id)"><img src="assets/img/icon-edit.png" alt="Edit" /></a>
 							<a href="#" ng-click="deleteTask(task.id)"><img src="assets/img/icon-trash.png" alt="Delete" /></a>
 						</td>
