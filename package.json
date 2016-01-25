@@ -1,0 +1,28 @@
+{
+  "name": "s2it-test-dev",
+  "version": "1.0.0",
+  "description": "A simple CRUD Using AngularJS and VanillaCSS",
+  "main": "assets/js/tasks.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/talitapagani/s2it-test-dev"
+  },
+  "keywords": [
+    "s2it",
+    "crud",
+    "to-do",
+    "angular"
+  ],
+  "author": "Talita Pagani",
+  "license": "Apache License",
+  "bugs": {
+    "url": "https://github.com/talitapagani/s2it-test-dev/issues"
+  },
+  "homepage": "talitapagani.com/s2it-test-dev"
+}
