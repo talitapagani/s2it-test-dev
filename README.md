@@ -12,7 +12,6 @@ It's a CRUD single-page application built with AngularJS and VanillaCSS (in othe
 |--|-- js
 |-- docs
 |-- lib
-|-- node_modules
 ```
 
 ### Root directory
@@ -25,10 +24,7 @@ This path stores the CSS, Images and Scripts developed for the application. If e
 Contains the documentation pages for the JavaScript code. You can access the documentation at http://talitapagani.com/s2it-test-dev/docs/
 
 ### Lib
-Contains external libraries and frameworks in CSS or JavaScript
-
-### Node Modules
-Dependencies installed locally via NPM.
+Contains external libraries and frameworks in CSS or JavaScript.
 
 ## Dependencies
 This application need to run in a web server. In your local machine, you can use WAMP, XAMPP, etc. Also, it's recommended that you install JSDoc:
