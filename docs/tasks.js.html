@@ -29,6 +29,7 @@
             <pre class="prettyprint source linenums"><code>/**
  * @file Angular.js + VanilaCSS CRUD
  * @copyright Talita Pagani 2016
+ * @namespace app
  */
 (function(angular) {
 
@@ -36,15 +37,17 @@
 
     /**
     * The AngularJS module 'TaskTest'
-    * @namespace App
+    * 
+    * @class app.TaskTest
+    * @memberof app
     */
     var app = angular.module('TasksTest', []);
 
     /**
     * Factory for Local Storage
-    * @kind function
-    * @memberof App
-    * @private
+    *
+    * @class app.LocalStorage
+    * @memberof app
     */
     app.factory("LocalStorage", function() {
         var LS = {};
@@ -61,54 +64,36 @@
 
     /**
     * TasksTest single controller
-    * @name TaskMgmt
-    * @memberof App
+    *
+    * @class app.TaskTest.TaskMgmt
     *
     * @param {string} controllerName - The name of the controller, binding the HTML
     * @param {Object[]} [dependencies] - The $scope and other dependencies 
     * @param {function} callback - Callback function passing the current scope and modules/factory to be used inside the controller
-    *
     * @property {number} tasks.taskID - The ID of some active task in edit or delete mode. Bing the input field.
     * @property {string} tasks.name - Binding for the input field of the task to be added/edited
     * @property {string} tasks.description - Binding for the input field of the task to be added/edited
+    * @property {boolean} tasks.showModal - A flag to show or hide the Add/Edit modal dialog
+    * @property {boolean} tasks.showModalDelete - A flag to show or hide the Delete modal dialog
+    * @property {boolean} tasks.edit - Flag indicating if the task is being edited of it's adding a new task
+    * @property {boolean} tasks.loading - Flag to show/hide the 'loading wheel' feedback
+    * @property {Object[]} tasks.list - Return the tasks saved at LocalStorage in JSON format or initiate a new array if LocalStorage is empty
+    * @property {Object} tasks.current - Scoped cache for the task that is being edited
     */
     app.controller('TaskMgmt', ['$scope', '$timeout', 'LocalStorage', function ($tasks, $timeout, LocalStorage) {
 
-        /**
-         * A flag to show or hide the Add/Edit modal dialog
-         * @type {boolean}
-         */
         $tasks.showModal = false;
-        /**
-         * A flag to show or hide the Delete modal dialog
-         * @type {boolean}
-         */
         $tasks.showModalDelete = false;
-        /**
-         * Flag indicating if the task is being edited of it's adding a new task
-         * @type {boolean}
-         */
         $tasks.edit = false;
-        /**
-         * Flag to show/hide the 'loading wheel' feedback
-         * @type {boolean}
-         */
         $tasks.loading = false;
-        /**
-         * Return the tasks saved at LocalStorage in JSON format or initiate a new array if LocalStorage is empty
-         * @type {Object[]}
-         */
         $tasks.list = LocalStorage.getItem("dbTasks") ? JSON.parse(LocalStorage.getItem("dbTasks")) : [];
-        /**
-         * Scoped cache for the task that is being edited
-         * @type {Object}
-         */
         $tasks.current = null;
 
         /** 
-        * Return the Task object and its index in the task list array
-        * @private
-        * @memberof TaskMgmt
+        * @name getTask
+        * @function
+        * @memberOf app.TaskTest.TaskMgmt
+        * @description Return the Task object and its index in the task list array
         * @param {number} taskId - The unique ID of the task to be edited/deleted
         * @return {Object}
         */
@@ -129,9 +114,10 @@
         }
 
         /** 
-        * Show the Add/Edit modal dialog and enable edit mode if a task id is specified
-        * @public
-        * @memberof TaskMgmt
+        * @name editTask
+        * @function
+        * @memberof app.TaskTest.TaskMgmt
+        * @description Show the Add/Edit modal dialog and enable edit mode if a task id is specified
         * @param {number} taskId - The unique ID of the task to be edited
         */
         $tasks.editTask = function (taskId) {
@@ -147,18 +133,20 @@
         };
 
         /** 
-        * Show the Add/Edit modal dialog in the 'add' mode (default)
-        * @public
-        * @memberof TaskMgmt
+        * @name addTask
+        * @function
+        * @memberof app.TaskTest.TaskMgmt
+        * @description Show the Add/Edit modal dialog in the 'add' mode (default)
         */
         $tasks.addTask = function () {
             $tasks.showModal = true;
         };
 
         /** 
-        * Show the Delete modal dialog and store the id of the task to be deleted in the scope
-        * @public
-        * @memberof TaskMgmt
+        * @name deleteTask
+        * @function
+        * @memberof app.TaskTest.TaskMgmt
+        * @description Show the Delete modal dialog and store the id of the task to be deleted in the scope
         * @param {number} taskId - The unique ID of the task to be deleted
         */
         $tasks.deleteTask = function (taskId) {
@@ -168,9 +156,10 @@
         };
 
         /** 
-        * Update an existing task or create a new task, both in the scope and LocalStorage
-        * @public
-        * @memberof TaskMgmt
+        * @name updateTask
+        * @function
+        * @memberof app.TaskTest.TaskMgmt
+        * @description Update an existing task or create a new task, both in the scope and LocalStorage
         * @param {number} taskId - The unique ID of the task to be edited
         * @param {Object} form - The add/edit form to be reset after submit
         */
@@ -216,9 +205,10 @@
         };
 
         /** 
-        * Perform the delete of the selected task after user confirms. Update the scope array and LocalStorage
-        * @public
-        * @memberof TaskMgmt
+        * @name confirmDeleteTask
+        * @function
+        * @memberof app.TaskTest.TaskMgmt
+        * @description Perform the delete of the selected task after user confirms. Update the scope array and LocalStorage
         * @param {number} taskId - The unique ID of the task to be deleted
         */
         $tasks.confirmDeleteTask = function(taskId) {
@@ -240,9 +230,10 @@
         };
 
         /** 
-        * Cancel the Add/Edit/Delete operation and close the modal dialog
-        * @public
-        * @memberof TaskMgmt
+        * @name cancel
+        * @function
+        * @memberof app.TaskTest.TaskMgmt
+        * @description Cancel the Add/Edit/Delete operation and close the modal dialog
         * @param {number} [form] - the form to be reset
         * @param {string} [option] - closes de delete modal if 'Delete' is specified, otherwise, closes Add/Edit modal
         */
@@ -262,9 +253,10 @@
         };
 
         /** 
-        * Change the status of a task. Update the scope list and LocalStorage
-        * @public
-        * @memberof TaskMgmt
+        * @name finishTask
+        * @function
+        * @memberof app.TaskTest.TaskMgmt
+        * @description Change the status of a task. Update the scope list and LocalStorage
         * @param {number} index - The index in the array
         * @param {boolean} taskDone - the status of the task: 'true' for done and 'false' for in progress
         */
@@ -287,13 +279,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="App.html">App</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="app.LocalStorage.html">LocalStorage</a></li><li><a href="app.TaskTest.html">TaskTest</a></li><li><a href="app.TaskTest.TaskMgmt.html">TaskMgmt</a></li></ul><h3>Namespaces</h3><ul><li><a href="app.html">app</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jan 24 2016 01:29:18 GMT-0200 (Horário brasileiro de verão)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jan 24 2016 22:36:18 GMT-0200 (Horário brasileiro de verão)
 </footer>
 
 <script> prettyPrint(); </script>

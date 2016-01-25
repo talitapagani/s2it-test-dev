@@ -1,4 +1,6 @@
 # AngularJS + VanillaCSS CRUD
+Code documentation: http://talitapagani.com/s2it-test-dev/docs/
+
 This repository was created as a technical test proposed by S2IT engineers during a recruitment proccess.
 It's a CRUD single-page application built with AngularJS and VanillaCSS (in other words, with no CSS frameworks). The application is a to-do list, where the user can add, view, update or delete tasks. The data is saved in the LocalStorage. The layout is responsive to be used in desktop, tablet and smartphone.
 
