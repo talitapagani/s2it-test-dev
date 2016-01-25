@@ -72,7 +72,7 @@ html {
 .hidden {
 	position:absolute;
 	left:-10000px;
-	top:auto;
+	top:-10000px;
 	width:1px;
 	height:1px;
 	overflow:hidden;
@@ -94,7 +94,7 @@ FORMS - GENERAL
 	color: #9E9E9E;
 	font-size: 1em;
 	border: none;
-	line-height: 4em;
+	line-height: 4rem;
 	border-bottom: 1px solid #9E9E9E;
 	-webkit-transition: outline 1s;
 	transition: outline 1s;
@@ -198,7 +198,7 @@ footer {
 	line-height: 3.43em;
 	height: 3.43em;
 	background: #F5F5F5;
-	width: 100vmax;
+	width: 100vw;
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -219,6 +219,7 @@ MODAL DIALOG
 .override {
 	width: 100vmax;
 	height: 100vmax;
+	overflow: hidden;
 	background: rgba(0, 0, 0, 0.6);
 	position: absolute;
 	top: 0;
@@ -229,21 +230,40 @@ MODAL DIALOG
 	width: 375px;
 	background: #FFF;
 	position: absolute;
-	left: 0;
-	left: calc(50vw - (375px/2));
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
 	top: 50px;
+	-webkit-animation: modalFade 0.5s linear;
+	animation: modalFade 0.5s linear;
 	-webkit-box-shadow: 0px 10px 20px 10px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 	0px 10px 20px 10px rgba(0, 0, 0, 0.2);
     box-shadow: 		0px 10px 20px 10px rgba(0, 0, 0, 0.2);
-    -webkit-transition: display 500ms;
-    transition: display 500ms;
+}
+
+.modal.ng-hide {
+	opacity: 0;
+} 
+
+@keyframes modalFade {
+  from { opacity:0; }
+  to { opacity:1; }
+}
+
+@-webkit-keyframes modalFade {
+  from { opacity:0; }
+  to { opacity:1; }
 }
 
 .modal header {
 	font-size: 2.29em;
 	color: #FFF;
-	padding: 1.5rem;
+	padding: 0.9rem;
 	background: #039BE5;
+}
+
+.modalDelete p {
+	padding-bottom: 2.5em;
 }
 
 .modal form {
@@ -252,6 +272,7 @@ MODAL DIALOG
 
 .modal .input-text {
 	line-height: 2.5rem;
+	height: 2.5rem; /* Fallback for IE (Desktop and Mobile) that doesn't support line-height in input tag */
 	color: #000;
 	margin-bottom: 15px;
 	width: 100%;
@@ -348,19 +369,20 @@ RESPONSIVE RULES
 		width: 100%;
 	}
 
-	.add_register button::after {
+	.add_register button:after {
 		content: ' new task';
 	}
 
 	table.grid {
-		max-width: 100vmax;
+		max-width: 100vw;
 	}
 
 	table.grid, .grid thead, .grid tbody, .grid th, .grid td, .grid tr { 
 		display: block;
 	}
 
-	.grid thead tr {
+	/* Note: This row cannot be set to display: none; due to accessibility */
+	.grid thead tr:first-child {
 		position: absolute;
 		top: -9999px;
 		left: -9999px;
@@ -374,36 +396,42 @@ RESPONSIVE RULES
 		background: #DADADA;
 	}
 
-	.grid tbody :not(.grid-mobile-counter) td {
+	.grid tbody td {
 		position: relative;
-		padding-left: 30%;
+		padding-left: 150px;
 		text-align: left;
 	}
 
-	.grid tbody :not(.grid-mobile-counter) td:before {
+	.grid tbody td:before {
 		position: absolute;
 		top: 0;
 		left: 0;
-		padding: 1.5em;
+		padding: 0 15px;
 		text-align: left;
 		color: #FFF;
 		font-weight: bold;
-		background: #039BE5;
-		width: 20%;
-		padding-right: 10px; 
+		line-height: 60px;
 		white-space: nowrap;
+		background: #039BE5;
+		width: 100px;
+		height: 100%;
 	}
 
-	.grid tbody tr.grid-mobile-counter {
+	.grid tr.grid-mobile-counter {
 		display: table-row;
 		background: #FFF;
+		color: #000;
 		font-weight: bold;
+		text-align: left;
 	}
 
-	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(1):before { content: "Done?"; }
-	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(2):before { content: "Name"; }
-	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(3):before { content: "Description"; }
-	.grid tbody :not(.grid-mobile-counter) td:nth-of-type(4):before { content: "Actions"; }
+	.grid tbody td:before { content: attr(data-header); }
 
 	.grid tfoot { display: none; }
+}
+
+@media screen and (max-width: 480px) {
+
+	.modal { width: 85vw; max-width: 320px; }
+
 }
