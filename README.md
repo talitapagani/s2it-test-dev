@@ -31,4 +31,7 @@ Contains external libraries and frameworks in CSS or JavaScript
 Dependencies installed locally via NPM.
 
 ## Dependencies
-This application was build to run easily, so, you don't need to install or run any extra resource.
+This application need to run in a web server. In your local machine, you can use WAMP, XAMPP, etc. Also, it's recommended that you install JSDoc:
+```
+npm install jsdoc
+```

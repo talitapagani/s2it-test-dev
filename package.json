@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/talitapagani/s2it-test-dev/issues"
   },
-  "homepage": "talitapagani.com/s2it-test-dev"
+  "homepage": "talitapagani.com/s2it-test-dev",
+  "devDependencies": {
+    "jsdoc": "^3.4.0"
+  }
 }
